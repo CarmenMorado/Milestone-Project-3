@@ -13,6 +13,7 @@
 		732AEB3F2580717D00519A42 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 732AEB3D2580717D00519A42 /* Main.storyboard */; };
 		732AEB412580718300519A42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 732AEB402580718300519A42 /* Assets.xcassets */; };
 		732AEB442580718300519A42 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 732AEB422580718300519A42 /* LaunchScreen.storyboard */; };
+		732AEB4D2580721500519A42 /* start.txt in Resources */ = {isa = PBXBuildFile; fileRef = 732AEB4C2580721500519A42 /* start.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		732AEB402580718300519A42 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		732AEB432580718300519A42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		732AEB452580718300519A42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		732AEB4C2580721500519A42 /* start.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = start.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				732AEB402580718300519A42 /* Assets.xcassets */,
 				732AEB422580718300519A42 /* LaunchScreen.storyboard */,
 				732AEB452580718300519A42 /* Info.plist */,
+				732AEB4C2580721500519A42 /* start.txt */,
 			);
 			path = "Milestone Project 3";
 			sourceTree = "<group>";
@@ -125,6 +128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				732AEB442580718300519A42 /* LaunchScreen.storyboard in Resources */,
+				732AEB4D2580721500519A42 /* start.txt in Resources */,
 				732AEB412580718300519A42 /* Assets.xcassets in Resources */,
 				732AEB3F2580717D00519A42 /* Main.storyboard in Resources */,
 			);
@@ -295,7 +299,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.CarmenMorado.Milestone-Project-3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -313,7 +317,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.CarmenMorado.Milestone-Project-3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
