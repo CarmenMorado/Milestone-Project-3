@@ -10,12 +10,56 @@ import UIKit
 class ViewController: UIViewController {
     var allWords = [String]()
     var cluesLabel: UILabel!
+    var hangManLabel: UILabel!
     var currentAnswer: UITextField!
     var letterButtons = [UIButton]()
     var activatedButtons = [UIButton]()
     var letterArray = [String]()
     var correctLetters = [String]()
     var scoreLabel: UILabel!
+    var hangManIndex = 0
+    var hangMan = ["""
+
+
+""", """
+   O
+
+
+
+""", """
+   O
+   |
+
+
+""", """
+   O
+  /|
+      
+
+""", """
+   O
+   /|\\
+
+
+""", """
+   O
+   /|\\
+ /
+        
+""", """
+   O
+   /|\\
+   / \\
+        
+""", """
+    +---+
+    |   |
+   O  |
+  /|\\  |
+  / \\  |
+        |
+  =========
+ """]
     
     var score = 0 {
         didSet {
@@ -35,16 +79,28 @@ class ViewController: UIViewController {
         
         cluesLabel = UILabel()
         cluesLabel.translatesAutoresizingMaskIntoConstraints = false
-        cluesLabel.font = UIFont.systemFont(ofSize: 80)
+        cluesLabel.font = UIFont.systemFont(ofSize: 100)
         cluesLabel.text = ""
         cluesLabel.textAlignment = .center
         cluesLabel.numberOfLines = 0
         cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
         view.addSubview(cluesLabel)
         
+        hangManLabel = UILabel()
+        hangManLabel.translatesAutoresizingMaskIntoConstraints = false
+        hangManLabel.font = UIFont.systemFont(ofSize: 50)
+        hangManLabel.text = hangMan[0]
+        hangManLabel.textAlignment = .center
+        hangManLabel.numberOfLines = 0
+        hangManLabel.lineBreakMode = .byClipping
+        hangManLabel.minimumScaleFactor = 0.5
+        hangManLabel.adjustsFontSizeToFitWidth = true
+        hangManLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
+        view.addSubview( hangManLabel)
+        
         currentAnswer = UITextField()
         currentAnswer.translatesAutoresizingMaskIntoConstraints = false
-        currentAnswer.placeholder = "Type a letter"
+        currentAnswer.placeholder = "Choose a letter"
         currentAnswer.textAlignment = .center
         currentAnswer.font = UIFont.systemFont(ofSize: 60)
         currentAnswer.isUserInteractionEnabled = false
@@ -71,14 +127,14 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             scoreLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             scoreLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
-            cluesLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 100),
-            // pin the leading edge of the clues label to the leading edge of our layout margins, adding 100 for some space
+            cluesLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: -50),
             cluesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            // make the clues label 60% of the width of our layout margins, minus 100
-            //cluesLabel.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.9, constant: 100),
+            cluesLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -800),
+            hangManLabel.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: -100),
+            hangManLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             currentAnswer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             currentAnswer.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
-            currentAnswer.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: 20),
+            currentAnswer.topAnchor.constraint(equalTo: hangManLabel.bottomAnchor, constant: 20),
             submit.topAnchor.constraint(equalTo: currentAnswer.bottomAnchor),
             submit.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -100),
             submit.heightAnchor.constraint(equalToConstant: 44),
@@ -92,29 +148,23 @@ class ViewController: UIViewController {
             buttonsView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20)
         ])
         
-        // set some values for the width and height of each button
         let width = 120
         let height = 80
         let alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
         
         for row in 0..<5 {
             for col in 0..<7 {
-                // create a new button and give it a big font size
                 let letterButton = UIButton(type: .system)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
 
-                // give the button some temporary empty String value
                 letterButton.setTitle("", for: .normal)
                 letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
 
-                // calculate the frame of this button using its column and row
                 let frame = CGRect(x: col * width, y: row * height, width: width, height: height)
                 letterButton.frame = frame
 
-                // add it to the buttons view
                 buttonsView.addSubview(letterButton)
 
-                // and also to the letterButtons array
                 letterButtons.append(letterButton)
             }
         }
@@ -145,11 +195,15 @@ class ViewController: UIViewController {
     func startGame() {
         cluesLabel.text! = ""
         
+        hangManLabel.text = hangMan[0]
+        
+        score = 0
+        
+        hangManIndex = 0
+        
         for btn in letterButtons {
             btn.isHidden = false
         }
-        
-        score = 0
         
         if !letterArray.isEmpty {
             letterArray.removeAll(keepingCapacity: true)
@@ -181,6 +235,13 @@ class ViewController: UIViewController {
     }
     
     @objc func submitTapped(_ sender: UIButton) {
+        if  currentAnswer.text == "" {
+            let ac = UIAlertController(title: "Please select a letter!", message: nil, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Retry", style: .default, handler: nil))
+            present(ac, animated: true)
+            return
+        }
+        
         guard let answerText = currentAnswer.text else { return }
         
         var letterArray2 = letterArray
@@ -200,6 +261,13 @@ class ViewController: UIViewController {
                 }
                 
                 if ((!letterArray.contains(answerText)) && (i == letterArray.count - 1)) {
+                    hangManIndex += 1
+                    if hangManIndex == 7 {
+                        let ac = UIAlertController(title: "You lost!!!!", message: nil, preferredStyle: .alert)
+                        ac.addAction(UIAlertAction(title: "Retry", style: .default, handler: restartGame))
+                        present(ac, animated: true)
+                    }
+                    hangManLabel.text = hangMan[hangManIndex]
                     let ac = UIAlertController(title: "Incorrect!", message: "Please enter a different letter.", preferredStyle: .alert)
                     ac.addAction(UIAlertAction(title: "Retry", style: .default, handler: nil))
                     present(ac, animated: true)
