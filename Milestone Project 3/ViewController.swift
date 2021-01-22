@@ -295,7 +295,7 @@ class ViewController: UIViewController {
         
         currentAnswer.text = currentAnswer.text?.appending(buttonTitle)
         activatedButtons.append(sender)
-        sender.isHidden = true
+        sender.alpha = 0.3
     }
     
     func restartGame(action: UIAlertAction) {
