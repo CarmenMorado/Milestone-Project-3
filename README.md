@@ -6,4 +6,5 @@ The challenge is this: make a hangman game using UIKit. As a reminder, this mean
 
 The user can then guess letters one at a time: if they guess a letter that it’s in the word, e.g. H, it gets revealed to make “?H??H?”; if they guess an incorrect letter, they inch closer to death. If they seven incorrect answers they lose, but if they manage to spell the full word before that they win.
 
-![ezgif-4-43a18e7da1b1](https://user-images.githubusercontent.com/42749527/102436848-70f48380-3fe7-11eb-8f78-c1a52386b38a.gif)
+![ezgif-3-e4cbe30647c2](https://user-images.githubusercontent.com/42749527/105552024-60fc4d80-5cd1-11eb-9642-1644aaae7e1b.gif)
+
